@@ -15,15 +15,13 @@ jobs:
 
     - name: Setup .NET
       uses: actions/setup-dotnet@v7
-      with:
-        dotnet-version: 6.0.100
+      with: dotnet-version: 6.0.100
 
     - name: Restore dependencies
       run: dotnet restore
 
   test:
     runs-on: ubuntu-latest
-
     needs: build
 
     steps:
@@ -32,8 +30,7 @@ jobs:
 
     - name: Setup .NET
       uses: actions/setup-dotnet@v7
-      with:
-        dotnet-version: 6.0.100
+      with: dotnet-version: 6.0.100
 
     - name: Run tests
       run: dotnet test --no-restore --verbosity normal
@@ -61,8 +58,7 @@ jobs:
 
     - name: Setup .NET
       uses: actions/setup-dotnet@v7
-      with:
-        dotnet-version: 6.0.100
+      with: dotnet-version: 6.0.100
 
     - name: Run SonarCloud analysis
       run: |
