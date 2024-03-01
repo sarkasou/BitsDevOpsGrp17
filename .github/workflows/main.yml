@@ -60,7 +60,7 @@ jobs:
 
     - name: Run SonarCloud Analysis
       run: |
-        dotnet sonarscanner begin /k:"YourProjectKey" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.cs.dotcover.reportsPaths="**/*.dotcover"
+        dotnet sonarscanner begin /k:"YourProjectKey" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.cs.dotcover.reportsPaths="**/*.dotcover" /d:sonar.host.url="https://sonarcloud.io" /o:"sarkasou"
         dotnet build --configuration Release
         dotnet sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
 
@@ -86,6 +86,6 @@ jobs:
 
     - name: Run SonarCloud Analysis
       run: |
-        dotnet sonarscanner begin /k:"YourProjectKey" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.cs.dotcover.reportsPaths="**/*.dotcover"
+        dotnet sonarscanner begin /k:"YourProjectKey" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.cs.dotcover.reportsPaths="**/*.dotcover" /d:sonar.host.url="https://sonarcloud.io" /o:"sarkasou"
         dotnet build --configuration Release
         dotnet sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
