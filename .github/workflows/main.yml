@@ -64,11 +64,11 @@ jobs:
         dotnet build --configuration Release
         dotnet test --configuration Release --no-build /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
 
-    - name: Publish coverage results
-      uses: coverallsapp/github-action@v2
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        path-to-lcov: "coverage.opencover.xml"
+   # - name: Publish coverage results
+   #   uses: coverallsapp/github-action@v2
+   #  with:
+   #     github-token: ${{ secrets.GITHUB_TOKEN }}
+    #    path-to-lcov: "coverage.opencover.xml"
 
     - name: Complete SonarCloud analysis
       run: dotnet sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
