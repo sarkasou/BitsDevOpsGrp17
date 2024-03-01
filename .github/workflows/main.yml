@@ -57,7 +57,7 @@ jobs:
       run: dotnet tool install --global dotnet-sonarscanner
 
     - name: Lint with SonarCloud
-      run: dotnet sonarscanner begin /k:"YourProjectKey" /d:sonar.login="${{ secrets.SONARCLOUD_TOKEN }}" /d:sonar.cs.opencover.reportsPaths="**/coverage.opencover.xml"
+      run: dotnet sonarscanner begin /k:"sarkasou" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.cs.opencover.reportsPaths="**/coverage.opencover.xml"
     
     - name: Build and Test
       run: |
@@ -71,6 +71,6 @@ jobs:
         path-to-lcov: "**/coverage.opencover.xml"
 
     - name: Complete SonarCloud analysis
-      run: dotnet sonarscanner end /d:sonar.login="${{ secrets.SONARCLOUD_TOKEN }}"
+      run: dotnet sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
 
 =
