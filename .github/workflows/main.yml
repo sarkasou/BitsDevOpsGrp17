@@ -56,6 +56,15 @@ jobs:
       with:
         dotnet-version: '6.0'
 
+    - name: Install dotnet-format
+      run: dotnet tool install -g dotnet-format --version 5.0.1
+
+    - name: Format code
+      run: dotnet format --check
+
+    - name: Analyze code
+      run: dotnet analyze
+
     - name: Check for changes
       id: check_changes
       run: echo ::set-output name=changes::$(git diff --name-only ${{ github.event.before }} ${{ github.sha }})
@@ -81,6 +90,6 @@ jobs:
 
     - name: Run SonarCloud Analysis
       run: |
-        dotnet sonarscanner begin /k:"sarkasou" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.cs.dotcover.reportsPaths="**/*.dotcover" /d:sonar.host.url="https://sonarcloud.io" /o:"sarkasou"
+        dotnet sonarscanner begin /k:"sarkasou_BitsDevOpsGrp17" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.cs.dotcover.reportsPaths="**/*.dotcover" /d:sonar.host.url="https://sonarcloud.io" /o:"sarkasou"
         dotnet build --configuration Release
         dotnet sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
