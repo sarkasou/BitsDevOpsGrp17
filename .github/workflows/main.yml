@@ -1,0 +1,76 @@
+name: Build, Test, and Lint
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '5.0'
+
+    - name: Restore dependencies
+      run: dotnet restore
+
+    - name: Build
+      run: dotnet build --configuration Release
+
+  test:
+    runs-on: ubuntu-latest
+
+    needs: build
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '5.0'
+
+    - name: Restore dependencies
+      run: dotnet restore
+
+    - name: Test
+      run: dotnet test --configuration Release --no-build
+
+  lint:
+    runs-on: ubuntu-latest
+
+    needs: build
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Install SonarCloud Scanner
+      run: dotnet tool install --global dotnet-sonarscanner
+
+    - name: Lint with SonarCloud
+      run: dotnet sonarscanner begin /k:"YourProjectKey" /d:sonar.login="${{ secrets.SONARCLOUD_TOKEN }}" /d:sonar.cs.opencover.reportsPaths="**/coverage.opencover.xml"
+    
+    - name: Build and Test
+      run: |
+        dotnet build --configuration Release
+        dotnet test --configuration Release --no-build /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
+
+    - name: Publish coverage results
+      uses: coverallsapp/github-action@v2
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        path-to-lcov: "**/coverage.opencover.xml"
+
+    - name: Complete SonarCloud analysis
+      run: dotnet sonarscanner end /d:sonar.login="${{ secrets.SONARCLOUD_TOKEN }}"
+
+=
