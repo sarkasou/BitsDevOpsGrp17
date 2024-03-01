@@ -51,16 +51,20 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v2
 
-    - name: Install SonarCloud Scanner
-      run: |
-        dotnet tool install --global dotnet-sonarscanner
-        export PATH="$PATH:/root/.dotnet/tools"
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '6.0'
 
-    - name: Run SonarCloud Analysis
-      run: |
-        dotnet sonarscanner begin /k:"YourProjectKey" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.cs.dotcover.reportsPaths="**/*.dotcover" /d:sonar.host.url="https://sonarcloud.io" /o:"sarkasou"
-        dotnet build --configuration Release
-        dotnet sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
+    - name: Install StyleCop
+      run: dotnet tool install -g StyleCop.Tool
+
+    - name: Run StyleCop
+      run: dotnet stylecop
+
+    - name: Check for changes
+      id: check_changes
+      run: echo ::set-output name=changes::$(git diff --name-only ${{ github.event.before }} ${{ github.sha }})
 
   sonarcloud:
     runs-on: ubuntu-latest
@@ -74,7 +78,7 @@ jobs:
       uses: actions/setup-java@v2
       with:
         distribution: 'adopt'
-        java-version: '11'
+        java-version: '16'
 
     - name: Install SonarCloud Scanner
       run: |
